@@ -1,0 +1,182 @@
+<div th:fragment="modal_approve_document" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <script src="/custom/admin/js/document/approve.js" type="text/javascript"></script>
+
+    <style>
+        .body-approve-document {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .wrap-list-update-content {
+            width: 48%;
+        }
+
+        .content-summary {
+            width: 48%;
+        }
+
+        .label-content {
+            padding-bottom: 8px;
+        }
+
+        .wrap-update-item {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .name-updater {
+            text-decoration: underline;
+            font-size: 12px;
+        }
+
+        .wrap-content {
+            position: relative;
+        }
+
+        .content-item {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            width: 100%;
+            padding: 4px;
+            word-wrap: break-word;
+        }
+
+        .content-item span, .content-item p {
+            display: block;
+            height: 24px;
+        }
+
+        .icon-move-right {
+            position: absolute;
+            top: calc(50% - 10px);
+            right: -24px;
+            display: flex;
+            align-items: center;
+            height: 20px;
+            width: 20px;
+            justify-content: center;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .select-old-version {
+            height: 30px;
+            width: 120px;
+        }
+
+        .highlight {
+            background-color: #def4ff;
+            position: relative;
+            display: block;
+        }
+
+        .icon-move {
+            position: absolute;
+            right: -24px;
+            top: calc(50% - 10px);
+            display: flex;
+            align-items: center;
+            height: 20px;
+            width: 20px;
+            justify-content: center;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="modal fade bd-example-modal-xl" id="modal_approve_document" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div style="overflow-y: initial !important" class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Phê duyệt các chỉnh sửa văn bản</h5>
+                </div>
+
+                <div style="overflow-y: auto; max-height: calc(100vh - 200px)" class="modal-body">
+
+                    <div style="border-bottom: 1px solid #ccc; padding-bottom: 12px" class="form-group">
+                        <div style="margin-bottom: 12px;">
+                            <label class="label-form">Phiên bản</label><sup style="color: red"> *</sup>
+                            <div>
+                                <label class="radio-container">
+                                    <span style="font-size: 13px">Giữ phiên bản hiện tại ({{version_current_pre}}.{{version_current_suf}})</span>
+                                    <input checked type="radio" v-model="typeVersion"
+                                           value="KEEP_VERSION">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio-container">
+                                    <span style="font-size: 13px">Nâng phiên bản mới</span>
+                                    <input type="radio" v-model="typeVersion"
+                                           value="NEW_VERSION">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <div :class="{hidden: typeVersion !== 'NEW_VERSION'}"
+                                     style="display: flex; align-items: center">
+                                    <label style="margin-bottom: 0; margin-right: 12px;">Chọn phiên bản mới:</label>
+                                    <input style="width: 40px" type="number" min="1" v-model="version_pre"/>
+                                    <span>.</span>
+                                    <input style="width: 40px" type="number" min="0" max="9" v-model="version_suf"/>
+                                </div>
+                                <p class="error-message-other" :class="{ hidden : !isShowErrorVersion}">
+                                    Phiên bản phải lớn hơn phiên bản hiện tại</p>
+                            </div>
+                        </div>
+
+
+                        <div style="margin-bottom: 12px;">
+                            <label class="label-form">Lấy nội dung tổng kết từ phiên bản cũ</label>
+                            <div v-if="listOldVersion.length > 0">
+                                <label style="margin-bottom: 0; margin-right: 12px;">Chọn phiên bản cũ:</label>
+                                <select class="select-old-version" v-model="oldVersionId">
+                                    <option v-for="oldVersion in listOldVersion" :value="oldVersion.id"
+                                            :label="getTextVersion(oldVersion.version)">
+                                    </option>
+                                </select>
+                            </div>
+                            <div v-if="listOldVersion.length == 0">
+                                <p class="error-message-other" :class="{ hidden : listOldVersion.length > 0}">
+                                    Không tồn tại phiên bản cũ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="body-approve-document">
+                        <div class="wrap-list-update-content">
+                            <h6 class="label-content">Các bản cập nhật</h6>
+                            <div class="list-update-content">
+                                <div v-for="updateItem in listUpdate" class="wrap-update-item">
+                                    <span class="name-updater">{{updateItem.nameUpdater}}</span>
+                                    <div class="wrap-content">
+                                        <div v-html="updateItem.contentUpdate" class="content-item">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-summary">
+                            <h6 class="label-content">Nội dung tổng kết</h6>
+                            <div class="form-group">
+                                <textarea id="textarea-content-summary"></textarea>
+                                <p class="error-message-other" :class="{ hidden : !isShowErrorContentSummary}">
+                                    Trường này là bắt buộc</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="saveContentSummary()">Lưu</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

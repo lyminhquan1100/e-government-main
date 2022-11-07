@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script type="text/x-template" id="unit_template" th:fragment="unit_template">
+        <div class="wrap-item">
+            <div class="item">
+                <i :class="{visible: unit.listChild.length == 0}" class="fa fa-caret-down icon-item"></i>
+                <input class="label-item" :value="unit.name">
+                <input type="number" hidden class="id-item" :value="unit.id">
+                <input type="number" hidden class="level-item" :value="unit.level">
+                <input type="number" hidden class="level-above-id-item" :value="unit.unitLevelAboveId">
+                <span class="wrap-btn">
+                    <button class="btn btn-add-unit btn-primary">Add</button>
+                    <button class="btn btn-delete-unit btn-danger">Delete</button>
+                </span>
+            </div>
+            <div class="list-item">
+                <unit-item-component v-for="unitChild in unit.listChild" :unit="unitChild" :ref="'unit-' + unitChild.id">
+                </unit-item-component>
+            </div>
+        </div>
+    </script>
+</body>
+</html>

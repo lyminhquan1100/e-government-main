@@ -1,0 +1,183 @@
+<div th:fragment="modal_add_document" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <script src="/custom/admin/js/document/add.js" type="text/javascript"></script>
+
+    <style>
+        .select2.select2-container.select2-container--default {
+            width: 100% !important;
+        }
+
+        .form-group.hidden .select2.select2-container.select2-container--default {
+            display: none !important;
+        }
+
+        .select-work-unit {
+            display: block;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            height: 36px;
+            padding: 0 8px;
+        }
+
+        .label-form {
+            font-weight: 500;
+        }
+
+    </style>
+
+    <div class="modal fade bd-example-modal-xl" id="modal_add_document" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div style="overflow-y: initial !important" class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div style="align-items: center" class="modal-header">
+                    <h5 class="modal-title" v-html="textHeaderModal"></h5>
+                    <h5 style="color: red; padding-left: 4px" v-if="isReceived">(Đã nhận)</h5>
+                </div>
+
+                <div style="overflow-y: auto; max-height: calc(100vh - 200px)" class="modal-body">
+                    <div class="row">
+                        <form id="form-document" class="col-md-12">
+
+                            <div class="form-group">
+                                <label class="label-form">Văn bản thuộc đơn vị</label><sup style="color: red"> *</sup>
+                                <select class="select-work-unit" v-model="workUnitId">
+                                    <option v-for="workUnit in listWorkUnit" :value="workUnit.id">{{workUnit.name}}
+                                    </option>
+                                </select>
+                                <p class="error-message-other" :class="{ hidden : !isShowErrorSelectWorkUnit}">
+                                    Trường này là bắt buộc</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-form">Tiêu đề</label><sup style="color: red"> *</sup>
+                                <input type="text" name="title" v-model="title" class="form-control input-title"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-form">Mục tiêu</label><sup style="color: red"> *</sup>
+                                <input type="text" name="target" v-model="target" class="form-control input-target"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-form">Nội dung</label><sup style="color: red"> *</sup>
+                                <textarea id="textarea-content-document"></textarea>
+                                <p class="error-message-other" :class="{ hidden : !isShowErrorContent}">
+                                    Trường này là bắt buộc</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label-form">Phiên bản</label><sup style="color: red"> *</sup>
+                                <div style="display: flex; align-items: center">
+                                    <input class="input-version-pre" style="width: 40px" type="number" min="1"
+                                           v-model="version_pre"/>
+                                    <span>.</span>
+                                    <input class="input-version-suf" style="width: 40px" type="number" min="0" max="9"
+                                           v-model="version_suf"/>
+                                </div>
+                            </div>
+
+                            <div v-if="typeModalDocument === 'add'">
+                                <div class="form-group">
+                                    <label class="label-form">Thành viên có thể xem văn bản</label><sup
+                                        style="color: red"> *</sup><br>
+                                    <div style="display: flex; align-items: center; margin-bottom: 12px; margin-top: 6px;">
+                                        <label style="margin-bottom: 0; margin-right: 8px;">Tất cả</label>
+                                        <input id="select-all-member-view" style="width: 20px; height: 20px; margin-right: 40px;"
+                                               type="checkbox"
+                                               v-model="isSelectAllMemberView">
+
+                                        <label style="margin-bottom: 0; margin-right: 8px;">Tất cả thành viên trong đơn vị</label>
+                                        <input id="select-all-member-same-work-unit-view" style="width: 20px; height: 20px"
+                                               type="checkbox"
+                                               v-model="isSelectAllMemberSameWorkUnitView">
+                                    </div>
+                                    <div :class="{hidden: isSelectAllMemberView || isSelectAllMemberSameWorkUnitView}">
+                                        <select class="form-control" id="select_viewer" multiple="multiple">
+                                            <option v-for="viewer in listAllViewerAndUpdater" :value="viewer.id">
+                                                {{viewer.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <p class="error-message-other" :class="{ hidden : !isShowErrorSelectViewer}">
+                                        {{messageErrorSelectViewer}}</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="label-form">Thành viên chỉnh sửa văn bản</label><sup
+                                        style="color: red"> *</sup><br>
+                                    <div style="display: flex; align-items: center; margin-bottom: 12px; margin-top: 6px;">
+                                        <label style="margin-bottom: 0; margin-right: 8px;">Tất cả</label>
+                                        <input id="select-all-member-update" style="width: 20px; height: 20px; margin-right: 40px;"
+                                               type="checkbox"
+                                               v-model="isSelectAllMemberUpdate">
+
+                                        <label style="margin-bottom: 0; margin-right: 8px;">Tất cả thành viên trong đơn vị</label>
+                                        <input id="select-all-member-same-work-unit-update" style="width: 20px; height: 20px"
+                                               type="checkbox"
+                                               v-model="isSelectAllMemberSameWorkUnitUpdate">
+                                    </div>
+                                    <div :class="{hidden: isSelectAllMemberUpdate || isSelectAllMemberSameWorkUnitUpdate}">
+                                        <select class="form-control" id="select_updater" multiple="multiple">
+                                            <option v-for="updater in listAllViewerAndUpdater" :value="updater.id">
+                                                {{updater.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <p class="error-message-other" :class="{ hidden : !isShowErrorSelectUpdater}">
+                                        {{messageErrorSelectUpdater}}</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="label-form">Thành viên phê duyệt văn bản</label><sup
+                                        style="color: red"> *</sup><br>
+                                    <select class="form-control" id="select_approver" multiple="multiple">
+                                        <option v-for="approver in listMember" :value="approver.id">{{approver.name}}
+                                        </option>
+                                    </select>
+                                    <p class="error-message-other" :class="{ hidden : !isShowErrorSelectApprover}">
+                                        Trường này là bắt buộc</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="label-form">Thành viên có thể xóa văn bản</label><sup
+                                        style="color: red"> *</sup><br>
+                                    <select class="form-control" id="select_deleter" multiple="multiple">
+                                        <option v-for="deleter in listMember" :value="deleter.id">{{deleter.name}}
+                                        </option>
+                                    </select>
+                                    <p class="error-message-other" :class="{ hidden : !isShowErrorSelectDeleter}">
+                                        Trường này là bắt buộc</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="label-form">Thành viên có thể gửi văn bản</label><sup
+                                        style="color: red"> *</sup><br>
+                                    <select class="form-control" id="select_sender" multiple="multiple">
+                                        <option v-for="sender in listMember" :value="sender.id">{{sender.name}}
+                                        </option>
+                                    </select>
+                                    <p class="error-message-other" :class="{ hidden : !isShowErrorSelectSender}">
+                                        Trường này là bắt buộc</p>
+                                </div>
+                            </div>
+
+                            <div v-if="!!conclude" class="form-group">
+                                <label class="label-form">Kết luận</label>
+                                <input disabled v-model="conclude" class="form-control"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Đóng</button>
+                    <button :hidden="isHiddenBtnSave" type="button"
+                            class="btn btn-primary btn-sm btn-save-document" @click="typeModalDocument === 'add' ? save() : receive()"
+                            v-text="textBtnModal"></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

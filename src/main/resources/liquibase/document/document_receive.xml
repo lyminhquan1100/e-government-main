@@ -1,0 +1,31 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_table_document_receive" author="namtg">
+        <createTable tableName="document_receive">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="work_unit_id" type="int(11)"/>
+            <column name="document_id" type="int(11)"/>
+            <column name="is_received" type="boolean" defaultValueBoolean="false"/>
+
+            <column name="is_can_edit_viewer" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_can_edit_updater" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_can_edit_approver" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_can_edit_deleter" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_can_edit_sender" type="boolean" defaultValueBoolean="false"/>
+
+            <column name="created_by_user_id" type="int(11)"/>
+            <column name="created_time" type="DATETIME"/>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append
+                    value="ENGINE=INNODB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_520_ci"/>
+        </modifySql>
+    </changeSet>
+
+
+</databaseChangeLog>

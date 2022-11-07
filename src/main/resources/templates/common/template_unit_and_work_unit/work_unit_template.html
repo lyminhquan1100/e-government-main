@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script type="text/x-template" id="work_unit_template" th:fragment="work_unit_template">
+    <div class="wrap-item">
+        <div class="item">
+            <i :class="{visible: workUnit.listChild.length == 0}" class="fa fa-caret-down icon-item"></i>
+            <div class="label-item" v-text="workUnit.name + ' (' + workUnit.unitName + ')'"></div>
+            <input type="text" hidden class="name-item" :value="workUnit.name">
+            <input type="number" hidden class="id-item" :value="workUnit.id">
+            <input type="number" hidden class="level-item" :value="workUnit.level">
+            <input type="number" hidden class="level-above-id-item" :value="workUnit.workUnitLevelAboveId">
+            <input type="number" hidden class="unit-id-item" :value="workUnit.unitId">
+            <span class="wrap-btn">
+                <button class="btn btn-add-work-unit btn-primary">Add</button>
+                <button class="btn btn-delete-work-unit btn-danger">Delete</button>
+            </span>
+        </div>
+        <div class="list-item">
+            <work-unit-item-component v-for="workUnitChild in workUnit.listChild" :workUnit="workUnitChild"
+                                      :ref="'work-unit-' + workUnitChild.id">
+            </work-unit-item-component>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="work_unit_form_user_template" th:fragment="work_unit_form_user_template">
+    <div :class="{'wrap-item-lv1': workUnit.level == 1}" class="wrap-item">
+        <div class="item">
+            <div class="label-item" v-text="workUnit.name"></div>
+            <input type="number" hidden class="id-item" :value="workUnit.id">
+            <div style="width: 350px; display: flex; justify-content: space-between; align-items: center">
+                <input class="is-can-manage-user hidden" style="width: 20px; height: 20px" type="checkbox">
+                <input class="is-can-receive-document hidden" style="width: 20px; height: 20px" type="checkbox">
+            </div>
+        </div>
+        <div class="list-item">
+            <work-unit-item-form-user-component v-for="workUnitChild in workUnit.listChild" :workUnit="workUnitChild"
+                                                :ref="'work-unit-' + workUnitChild.id">
+            </work-unit-item-form-user-component>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="work_unit_form_send_document_template"
+        th:fragment="work_unit_form_send_document_template">
+    <div :class="{'wrap-item-lv1': workUnit.level == 1}" class="wrap-item">
+        <div style="display: flex; justify-content: space-between" class="item">
+            <div class="label-item" v-text="workUnit.name"></div>
+            <input type="number" hidden class="id-item" :value="workUnit.id">
+            <div style="width: 350px; display: flex; justify-content: space-between; align-items: center">
+                <input class="is-can-edit-viewer hidden" style="width: 20px; height: 20px" type="checkbox">
+                <input class="is-can-edit-updater hidden" style="width: 20px; height: 20px" type="checkbox">
+                <input class="is-can-edit-approver hidden" style="width: 20px; height: 20px" type="checkbox">
+                <input class="is-can-edit-deleter hidden" style="width: 20px; height: 20px" type="checkbox">
+                <input class="is-can-edit-sender hidden" style="width: 20px; height: 20px" type="checkbox">
+            </div>
+        </div>
+        <div class="list-item">
+            <work-unit-item-form-send-document-component v-for="workUnitChild in workUnit.listChild"
+                                                         :workUnit="workUnitChild"
+                                                         :ref="'work-unit-' + workUnitChild.id">
+            </work-unit-item-form-send-document-component>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="work_unit_form_side_user_template"
+        th:fragment="work_unit_form_side_user_template">
+    <div :class="{'wrap-item-lv1': workUnit.level == 1}" class="wrap-item">
+        <div style="display: flex" class="item">
+            <i :class="{visible: workUnit.listChild.length == 0}" class="fa fa-caret-down icon-item"></i>
+            <div class="label-item" v-text="workUnit.name"></div>
+            <input type="number" hidden class="id-item" :value="workUnit.id">
+        </div>
+        <div class="list-item">
+            <work-unit-item-form-side-user-component v-for="workUnitChild in workUnit.listChild"
+                                                     :workUnit="workUnitChild"
+                                                     :ref="'work-unit-' + workUnitChild.id">
+            </work-unit-item-form-side-user-component>
+        </div>
+    </div>
+</script>
+</body>
+</html>

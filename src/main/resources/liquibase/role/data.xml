@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="insert_role" author="namtg">
+        <insert tableName="role">
+            <column name="name" value="OWNER_DOCUMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="VIEW_DOCUMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="UPDATE_DOCUMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="DELETE_DOCUMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="SEND_DOCUMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="APPROVE_DOCUMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="MANAGE_NEWS"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="MANAGE_FIELD"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="MANAGE_REASON_DENIED_COMMENT"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="MANAGE_USER"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="MANAGE_UNIT"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

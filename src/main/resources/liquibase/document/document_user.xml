@@ -1,0 +1,29 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_table_document_user" author="namtg">
+        <createTable tableName="document_user">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="document_id" type="int(11)"/>
+            <column name="user_id" type="int(11)"/>
+            <column name="is_owner" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_view" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_update" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_delete" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_send" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_approve" type="boolean" defaultValueBoolean="false"/>
+
+            <column name="is_can_edit_permission" type="boolean" defaultValueBoolean="false"/>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append
+                    value="ENGINE=INNODB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_520_ci"/>
+        </modifySql>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,6 @@
+package com.namtg.egovernment.enum_common;
+
+public enum TypeNotificationAdmin {
+    COMMENT, REPLY_COMMENT, EDIT_COMMENT, CREATE_POST, CONCLUSION_POST,
+    RECEIVE_DOCUMENT, INVITE_UPDATE_DOCUMENT, REMIND_UPDATED_CONTENT_DOCUMENT
+}

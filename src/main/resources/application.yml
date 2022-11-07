@@ -1,0 +1,58 @@
+server:
+  port: 8080
+#  port: 8443
+
+#  ssl:
+#    key-store: classpath:springboot.p12
+#    key-store-password: 123123
+#    key-store-type: pkcs12
+#    key-alias: namtg
+#    enabled: true
+#    protocol: TLS
+#    enabled-protocols: TLSv1.2
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/e?useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: root
+#    url: jdbc:mysql://database-1.co1fwd6dy1kf.ap-southeast-1.rds.amazonaws.com/e_government?serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&characterEncoding=UTF-8
+#    username: namtg
+#    password: Nam12341234+
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        use-new-id-generator-mappings: false
+        enable_lazy_load_no_trans: true
+        jdbc:
+          batch_size: 2000
+        order_inserts: true
+        order_update: true
+    open-in-view: false
+  jackson:
+    time-zone: Asia/Ho_Chi_Minh
+    date-format: yyyy/MM/dd HH:mm
+  liquibase:
+    change-log: classpath:/liquibase/db-changelog-master.xml
+    enabled: true
+    drop-first: false
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+job:
+  notifyConclusionPost: 0 0 7 * * ? # 7:00 am every day
+  deleteComment: 0 0 6 * * ? # 6:00 am every day
+
+host: http://localhost:8080/
+
+amazonProperties:
+  endpointUrl: https://s3.ap-southeast-1.amazonaws.com
+  accessKey: AKIATFNOB6547IQJIC57
+  secretKey: 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
+  bucketName: namtgbucket
+
